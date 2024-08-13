@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { FormType } from "../types/form";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-function Form() {
+type FormProps = {
+  setSessions: React.Dispatch<React.SetStateAction<FormType[]>>;
+};
+
+function Form({ setSessions }: FormProps) {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<FormType>({
     hostname: "",
     players: 0,
@@ -30,8 +37,13 @@ function Form() {
         title: "Game Session Created",
         icon: "success",
         confirmButtonAriaLabel: "Ok",
+        timer: 3000,
       });
       console.log(formData);
+      setSessions((prev) => [...prev, formData]);
+      setInterval(() => {
+        navigate("/sessions");
+      }, 3000);
     } else {
       Swal.fire({
         title: "Error",
